@@ -129,8 +129,8 @@ function CardItem({ card, onMove, onChecklistToggle, onAddChecklistItem, onAddCo
   const checklist = card.checklist ?? []
   const checkedCount = checklist.filter(i => i.checked).length
   const allChecked = checklist.length === 0 || checkedCount === checklist.length
-  const canForward = !isClientScope && !isLocked && currentIdx < flow.length - 1 && allChecked
-  const canBack = !isClientScope && !isLocked && currentIdx > 0
+  const canForward = !isLocked && currentIdx < flow.length - 1 && allChecked
+  const canBack = !isLocked && currentIdx > 0
 
   if (isHPU) {
     return (
@@ -262,28 +262,23 @@ function CardItem({ card, onMove, onChecklistToggle, onAddChecklistItem, onAddCo
         </div>
       )}
 
-      {!isClientScope && (
-        <div className="flex gap-1 mt-2">
-          <button
-            onClick={() => onMove(card, 'back')}
-            disabled={!canBack}
-            className="flex-1 text-xs py-1 rounded border border-slate-200 hover:bg-slate-50 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
-          >
-            ← Back
-          </button>
-          <button
-            onClick={() => onMove(card, 'forward')}
-            disabled={!canForward}
-            className={`flex-1 text-xs py-1 rounded text-white transition-colors
-              ${canForward ? 'bg-blue-600 hover:bg-blue-700' : 'bg-slate-300 cursor-not-allowed'}`}
-          >
-            Forward →
-          </button>
-        </div>
-      )}
-      {isClientScope && (
-        <p className="text-xs text-slate-400 italic mt-1">Client supplies — tracking only</p>
-      )}
+      <div className="flex gap-1 mt-2">
+        <button
+          onClick={() => onMove(card, 'back')}
+          disabled={!canBack}
+          className="flex-1 text-xs py-1 rounded border border-slate-200 hover:bg-slate-50 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+        >
+          ← Back
+        </button>
+        <button
+          onClick={() => onMove(card, 'forward')}
+          disabled={!canForward}
+          className={`flex-1 text-xs py-1 rounded text-white transition-colors
+            ${canForward ? 'bg-blue-600 hover:bg-blue-700' : 'bg-slate-300 cursor-not-allowed'}`}
+        >
+          Forward →
+        </button>
+      </div>
 
       <CardAddons card={card} onAddChecklistItem={onAddChecklistItem} onAddComment={onAddComment} />
     </div>
